@@ -46,31 +46,31 @@ def go1():
 	set_servo_angle(6,45)
 	set_servo_angle(8,45)
 	set_servo_angle(10,135)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(0,60)
 	set_servo_angle(2,60)
 	set_servo_angle(4,120)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(6,135)
 	set_servo_angle(8,135)
 	set_servo_angle(10,45)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(0,90)
 	set_servo_angle(2,90)
-	set_servo_angle(4,90)
+	set_servo_angle(4,80)
 	
 	set_servo_angle(9,135)
 	set_servo_angle(11,135)
 	set_servo_angle(7,45)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(3,120)
 	set_servo_angle(5,120)
 	set_servo_angle(1,60)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(9,45)
 	set_servo_angle(11,45)
 	set_servo_angle(7,135)
-	time.sleep(0.3)
+	time.sleep(0.5)
 	set_servo_angle(3,90)
 	set_servo_angle(5,90)
 	set_servo_angle(1,90)	
@@ -83,7 +83,11 @@ def opencvfowlling():
 	global center_y1
 	global f_x,f_y,f_w,f_h
 	global countt
-	while True:
+	st=0
+	sumx=0 
+	sumy=0
+	while st<5:
+		time.sleep(0.2)
 				# 读取相机画面
 		ret, frame = cap.read()
 				# 画面水平翻转
@@ -121,27 +125,31 @@ def opencvfowlling():
 		if len(faces) > 0:  # 判断人脸的数量是否>0
 			f_z_x = int(f_x + (f_w / 2))
 			f_z_y = int(f_y + (f_h / 2))
-			print("脸部中心x:", f_z_x, "脸部中心y:",  f_z_y)
+			#print("脸部中心x:", f_z_x, "脸部中心y:",  f_z_y)
 		else:
 			f_z_x, f_z_y = center_x, center_y  # 没有人脸时就默认人脸位置居中，防止后续使用舵机云台时乱动
-			print("脸部中心x:", f_z_x, "脸部中心y:",  f_z_y)
+			#print("脸部中心x:", f_z_x, "脸部中心y:",  f_z_y)
 
 				# 计算人脸中心与画面中心相差的坐标
 		difference_value_x = f_z_x - center_x
 		difference_value_y = f_z_y - center_y
-		print("x坐标偏移量为：", difference_value_x, "y坐标偏移量为：", difference_value_y)
+		#print("x坐标偏移量为：", difference_value_x, "y坐标偏移量为：", difference_value_y)
 							# 显示相机画面
 		#cv2.imshow("Face following...", flipped_frame)
-
-				# 检测按键，如果按下q键则退出循环
-		 
-		print("----",countt)
 		countt+=1
+		st+=1
+		sumx+=difference_value_x
+		sumy+=difference_value_y
+	print("----",countt)
+	print("x坐标偏移量为：", sumx/5, "y坐标偏移量为：", sumy/5)
+	sumx=0
+	sumy=0
 
 pwm.set_pwm_freq (50)
 x = 0
 d = 0
 n=0
+i=0
 countt=0
 cv2.namedWindow("Camera Feed")
 face_cascade = cv2.CascadeClassifier('/home/khadas/Desktop/testxml.xml')
@@ -154,4 +162,16 @@ center_y1 = int(h / 2)
 print("输出中心坐标为：", center_x1, center_y1)
 f_x = f_y = f_w = f_h = None
 opencvfeed = Process(target = opencvfowlling)
-opencvfeed.start()
+
+#stand()
+print("input the step num")
+i = int(input())
+while n<i:
+	
+	go1()
+	n+=1
+	opencvfeed.start()
+	opencvfeed.join()
+	if(opencvfeed.is_alive):
+		opencvfeed.terminate()
+		opencvfeed.join()

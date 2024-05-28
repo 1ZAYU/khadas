@@ -1,0 +1,4 @@
+khadas vim3 gpio :
+https://docs.khadas.com/products/sbc/vim3/applications/gpio/40pin-header
+wiringPi :
+https://www.cnblogs.com/keep--fighting/p/17666707.html
