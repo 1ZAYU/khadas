@@ -74,46 +74,29 @@ def go1():
 	set_servo_angle(1,90)	
 def go2():
 	set_servo_angle(9,90)
-	time.sleep(0.3)
 	set_servo_angle(3,120)
-	time.sleep(0.3)
 	set_servo_angle(9,45)
 	time.sleep(0.3)
 	set_servo_angle(6,90)
-	time.sleep(0.3)
 	set_servo_angle(0,60)
-	time.sleep(0.3)
 	set_servo_angle(6,135)
 	time.sleep(0.3)
 	set_servo_angle(10,90)
-	time.sleep(0.3)
 	set_servo_angle(4,120)
-	time.sleep(0.3)
 	set_servo_angle(10,45)
 	time.sleep(0.3)
-	
 	set_servo_angle(7,90)
-	time.sleep(0.3)
 	set_servo_angle(1,60)
-	time.sleep(0.3)
 	set_servo_angle(7,135)
 	time.sleep(0.3)
-	
 	set_servo_angle(8,90)
-	time.sleep(0.3)
 	set_servo_angle(2,70)
-	time.sleep(0.3)
 	set_servo_angle(8,135)
-	
-	
 	time.sleep(0.3)
 	set_servo_angle(11,90)
-	time.sleep(0.3)
 	set_servo_angle(5,110)
-	time.sleep(0.3)
 	set_servo_angle(11,45)
 	time.sleep(0.3)
-	
 	set_servo_angle(0,90)
 	set_servo_angle(1,90)
 	set_servo_angle(3,90)
@@ -128,11 +111,7 @@ x = 0
 d = 0
 n=0
 stand()
-while x<7:
-	go2()
-	x+=1
-
-go2()
+#go2()
 
 while(1):
 	print("input the servo num and angle")

@@ -74,6 +74,55 @@ def go1():
 	set_servo_angle(3,90)
 	set_servo_angle(5,90)
 	set_servo_angle(1,90)	
+def go2():
+	set_servo_angle(9,90)
+	time.sleep(0.3)
+	set_servo_angle(3,120)
+	time.sleep(0.3)
+	set_servo_angle(9,45)
+	time.sleep(0.3)
+	set_servo_angle(6,90)
+	time.sleep(0.3)
+	set_servo_angle(0,60)
+	time.sleep(0.3)
+	set_servo_angle(6,135)
+	time.sleep(0.3)
+	set_servo_angle(10,90)
+	time.sleep(0.3)
+	set_servo_angle(4,120)
+	time.sleep(0.3)
+	set_servo_angle(10,45)
+	time.sleep(0.3)
+	
+	set_servo_angle(7,90)
+	time.sleep(0.3)
+	set_servo_angle(1,60)
+	time.sleep(0.3)
+	set_servo_angle(7,135)
+	time.sleep(0.3)
+	
+	set_servo_angle(8,90)
+	time.sleep(0.3)
+	set_servo_angle(2,70)
+	time.sleep(0.3)
+	set_servo_angle(8,135)
+	
+	
+	time.sleep(0.3)
+	set_servo_angle(11,90)
+	time.sleep(0.3)
+	set_servo_angle(5,110)
+	time.sleep(0.3)
+	set_servo_angle(11,45)
+	time.sleep(0.3)
+	
+	set_servo_angle(0,90)
+	set_servo_angle(1,90)
+	set_servo_angle(3,90)
+	set_servo_angle(4,90)
+	set_servo_angle(2,135)
+	set_servo_angle(5,45)
+	time.sleep(0.3)
 def opencvfowlling():
 	global face_cascade
 	global cap
@@ -83,10 +132,11 @@ def opencvfowlling():
 	global center_y1
 	global f_x,f_y,f_w,f_h
 	global countt
+	global flipped_frame
 	st=0
 	sumx=0 
 	sumy=0
-	while st<5:
+	while st<3:
 		time.sleep(0.2)
 				# 读取相机画面
 		ret, frame = cap.read()
@@ -141,10 +191,15 @@ def opencvfowlling():
 		sumx+=difference_value_x
 		sumy+=difference_value_y
 	print("----",countt)
-	print("x坐标偏移量为：", sumx/5, "y坐标偏移量为：", sumy/5)
+	print("x坐标偏移量为：", sumx/3, "y坐标偏移量为：", sumy/3)
 	sumx=0
 	sumy=0
-
+def showfeed():
+	t=0
+	global flipped_frame
+	while t<3:
+		t+=1
+		cv2.imshow("Face following...", flipped_frame)
 pwm.set_pwm_freq (50)
 x = 0
 d = 0
@@ -161,17 +216,26 @@ center_x1 = int(w / 2)
 center_y1 = int(h / 2)
 print("输出中心坐标为：", center_x1, center_y1)
 f_x = f_y = f_w = f_h = None
-opencvfeed = Process(target = opencvfowlling)
+flipped_frame = 0 
 
-#stand()
-print("input the step num")
-i = int(input())
-while n<i:
-	
-	go1()
-	n+=1
-	opencvfeed.start()
-	opencvfeed.join()
-	if(opencvfeed.is_alive):
-		opencvfeed.terminate()
-		opencvfeed.join()
+def main():
+	global n,i
+	#stand()
+	print("input the step num")
+	#i = int(input())
+	i=5
+	while n<i:
+		opencvfeed = Process(target = opencvfowlling)
+		#feedshow = Process(target = showfeed)
+		n+=1
+		opencvfeed.start()
+		time.sleep(1)
+		#feedshow.start()
+		time.sleep(0.5)
+		if(opencvfeed.is_alive):
+			opencvfeed.terminate()
+		#if(feedshow.is_alive):
+		#	feedshow.terminate()
+
+if __name__=='__main__':
+	main()
