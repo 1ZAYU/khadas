@@ -1,9 +1,6 @@
 from __future__ import division
-from multiprocessing import Process
-
-import time
-import Adafruit_PCA9685
-import cv2
+from multiprocessing import Process,Array
+import time, Adafruit_PCA9685, cv2
 pwm = Adafruit_PCA9685.PCA9685(busnum=3)
 servo_min = 150
 servo_max = 600
@@ -190,16 +187,11 @@ def opencvfowlling():
 		st+=1
 		sumx+=difference_value_x
 		sumy+=difference_value_y
+		#return flipped_frame
 	print("----",countt)
 	print("x坐标偏移量为：", sumx/3, "y坐标偏移量为：", sumy/3)
 	sumx=0
 	sumy=0
-def showfeed():
-	t=0
-	global flipped_frame
-	while t<3:
-		t+=1
-		cv2.imshow("Face following...", flipped_frame)
 pwm.set_pwm_freq (50)
 x = 0
 d = 0
@@ -209,6 +201,12 @@ countt=0
 cv2.namedWindow("Camera Feed")
 face_cascade = cv2.CascadeClassifier('/home/khadas/Desktop/testxml.xml')
 cap = cv2.VideoCapture(0)
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+
+# 设置分辨率
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
 r, f = cap.read()
 h, w, ch = f.shape
 print("输出画面的高度和宽度", h, w)
@@ -226,16 +224,12 @@ def main():
 	i=5
 	while n<i:
 		opencvfeed = Process(target = opencvfowlling)
-		#feedshow = Process(target = showfeed)
 		n+=1
 		opencvfeed.start()
 		time.sleep(1)
-		#feedshow.start()
-		time.sleep(0.5)
 		if(opencvfeed.is_alive):
 			opencvfeed.terminate()
-		#if(feedshow.is_alive):
-		#	feedshow.terminate()
+
 
 if __name__=='__main__':
 	main()

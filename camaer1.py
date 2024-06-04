@@ -3,7 +3,13 @@ import time
 
 cv2.namedWindow("Camera Feed")
 face_cascade = cv2.CascadeClassifier('/home/khadas/Desktop/testxml.xml')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+
+# 设置分辨率
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
 r, f = cap.read()
 h, w, ch = f.shape
 print("输出画面的高度和宽度", h, w)
